@@ -1,5 +1,11 @@
 <%@page import="javaBeans.Usuario"%>
-<%  String nome = "", email = "", celular = "", senha = "", nivel = "", sHTML = "";
+<%  
+  /* Código de Controle da Sessão */
+  String nomeUser = (String) session.getAttribute("nome");
+  if (nomeUser == null) response.sendRedirect("../index.html");
+  /* Código de Controle da Sessão */
+
+    String nome = "", email = "", celular = "", senha = "", nivel = "", sHTML = "";
     String oper = request.getParameter("oper");
     Usuario user = new Usuario(); // Instancia o objeto Usuario
     user.email = request.getParameter("email");

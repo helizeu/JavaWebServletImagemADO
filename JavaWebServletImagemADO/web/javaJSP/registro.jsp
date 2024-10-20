@@ -1,5 +1,10 @@
 <%@page import="javaBeans.Usuario"%>
-<%  Usuario user = new Usuario(); // Instancia o objeto Usuario
+<%  
+    
+  String nomeUser = (String) session.getAttribute("nome");
+  if (nomeUser == null) response.sendRedirect("../index.html");
+
+    Usuario user = new Usuario(); // Instancia o objeto Usuario
     if (!(user.statusSQL == null)) {
         out.println(user.statusSQL);
     }

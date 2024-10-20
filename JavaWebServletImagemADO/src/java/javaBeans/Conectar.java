@@ -1,5 +1,4 @@
 package javaBeans;
-
 import java.sql.DriverManager; // Driver para abrir Conexão 
 import java.sql.ResultSet;
 import java.sql.SQLException;  // Tratamento de Erros SQL
@@ -7,7 +6,6 @@ import java.sql.Connection;    // Armazena a Conexão Aberta
 import java.sql.PreparedStatement;
 
 public class Conectar {
-
     public Connection con;       // variávei que armazena a conexão com o SQL
     public String sql;           // variável que armazena os comandos SQL  
     public PreparedStatement ps; // objeto que prepara o sql
@@ -17,8 +15,16 @@ public class Conectar {
     public String usuario = "root";  // Login nome do usuario do banco SQL
     public String senha = "";        // Senha do Banco SQL
     public String statusSQL;
+  
+   /* Atributos do Usuário Master Administrador do Sistema */
+      String userMaster  = "admin";
+      String senhaMaster = "1234";
+      String emailMaster = "admin@admin.com";
+      String nivelMaster = "master";
+      String nomeMaster  = "D.r Eliseu LS";
+   /* Atributos do Usuário Master Administrador do Sistema */
 
-    /* Na variável statusSQl conterá null quando não tiver erros 
+   /* Na variável statusSQl conterá null quando não tiver erros 
 Mas quando haver erros conterá a mensagem de erro capturada
 Pela excessão da clausula try. */
 

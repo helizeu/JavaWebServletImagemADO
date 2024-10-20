@@ -2,13 +2,10 @@
 <%
     String email = request.getParameter("email"); // captura email do form 
     String senha = request.getParameter("senha"); // captura senha do form 
-
     Usuario user = new Usuario();// instancia Usuario
     user.email = email; // mude para user.setEmail(email);
     user.senha = senha;  // mude para user.setSenha(senha);
 %>
-
-
 <html lang = "pt-br">
     <head>
         <title> Registro de Usuários </title>
@@ -18,7 +15,11 @@
     <body style="background-color: greenyellow;" >
         <%
             if (user.getLogin() == true) { // faz o login no objeto user
-                response.sendRedirect("sistema.jsp");// carrega a página de sistema
+            session.setAttribute("nome", user.nome);
+            session.setAttribute("email", user.nome);
+            session.setAttribute("nivel", user.nome);
+            session.setAttribute("pkuser", user.nome);
+            response.sendRedirect("sistema.jsp");// carrega a página de sistema
             } else {
                 String sHTML = "<center>Opa! Login ou Senha não encontrados! Tente Novamente! <br>"
                         + "<a href = '../index.html'> Voltar </a></center>";

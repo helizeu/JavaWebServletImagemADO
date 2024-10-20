@@ -1,7 +1,5 @@
 package javaBeans;
-
 import java.sql.SQLException;
-
 public class Usuario extends Conectar {
 
     public int pkuser;
@@ -12,7 +10,11 @@ public class Usuario extends Conectar {
     public String nivel;
 
     public boolean getLogin() {
-        if (email.equals("admin") && senha.equals("1234")) {
+        if (email.equals(userMaster) && senha.equals(senhaMaster)) {
+            nome = nomeMaster;
+            email = emailMaster;
+            pkuser = 0; 
+            nivel = nivelMaster;
             return true;
         }
 
@@ -23,6 +25,10 @@ public class Usuario extends Conectar {
             ps.setString(2, senha); // Configura Parametros
             tab = ps.executeQuery(); // Executa comando SQL
             if (tab.next()) {
+                nome   = tab.getString("nome");
+                email  = tab.getString("email");
+                pkuser = tab.getInt("pkuser"); 
+                nivel  = tab.getString("nivel");
                 return true;
             }
             this.statusSQL = null; // armazena null se deu tudo certo
