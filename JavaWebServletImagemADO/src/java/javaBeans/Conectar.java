@@ -20,8 +20,9 @@ public class Conectar {
       String userMaster  = "admin";
       String senhaMaster = "1234";
       String emailMaster = "admin@admin.com";
-      String nivelMaster = "master";
+      String nivelMaster = "Master";
       String nomeMaster  = "D.r Eliseu LS";
+      String fotoMaster  = "foto_0";
    /* Atributos do Usuário Master Administrador do Sistema */
 
    /* Na variável statusSQl conterá null quando não tiver erros 
@@ -53,12 +54,13 @@ Pela excessão da clausula try. */
             ps = con.prepareStatement(sql);
             ps.executeUpdate(); // Executa o comando SQL dentro do servidor 
 
-            sql = "create table usuarios (pkuser int AUTO_INCREMENT, nome varchar(40),"
-                    + "email varchar(40), celular varchar(15), senha varchar(11), nivel varchar(20), primary key (pkuser) )";
-            ps = con.prepareStatement(sql);
-            ps.executeUpdate();
-
-            statusSQL = null; // Coloca null nas operações bem sucedidas
+           sql = "create table usuarios (pkuser int AUTO_INCREMENT, nome varchar(40),"
+                + "email varchar(40), celular varchar(15), senha varchar(11), "
+                   + "nivel varchar(20), foto varchar(20),  primary key (pkuser) )";
+           ps = con.prepareStatement(sql);
+           ps.executeUpdate();
+            
+           statusSQL = null; // Coloca null nas operações bem sucedidas
 
         } catch (SQLException err) {
             statusSQL = "Erro ao executar SQL " + err.getMessage(); // houve erros

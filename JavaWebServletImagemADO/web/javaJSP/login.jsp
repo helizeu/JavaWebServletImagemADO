@@ -14,15 +14,17 @@
     </head>
     <body style="background-color: greenyellow;" >
         <%
-            if (user.getLogin() == true) { // faz o login no objeto user
+            if ( user.getLogin() == true ) { // faz o login no objeto user
             session.setAttribute("nome", user.nome);
-            session.setAttribute("email", user.nome);
-            session.setAttribute("nivel", user.nome);
-            session.setAttribute("pkuser", user.nome);
+            session.setAttribute("email", user.email);
+            session.setAttribute("nivel", user.nivel);
+            session.setAttribute("pkuser", user.pkuser);
+            if (user.foto == null) user.foto = " ";
+            session.setAttribute("foto", user.foto);
             response.sendRedirect("sistema.jsp");// carrega a página de sistema
             } else {
-                String sHTML = "<center>Opa! Login ou Senha não encontrados! Tente Novamente! <br>"
-                        + "<a href = '../index.html'> Voltar </a></center>";
+                String sHTML = "<center>Opa! Erro de Login! " + user.statusSQL 
+                        + "<br><a href = '../index.html'> Voltar </a></center>";
                 out.println(sHTML);
             }%>
     </body>

@@ -1,6 +1,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
   String nomeUser = (String) session.getAttribute("nome");
+  String nivelUser = (String) session.getAttribute("nivel");
   if (nomeUser == null) response.sendRedirect("../index.html");
 %>
 <!DOCTYPE html>
@@ -15,7 +16,7 @@
     <br> <br> <br> 
     <h2 style="color:black;"> *** Bem vindo ao Sistema Java Web Servlet Uploader *** </h2>
     <%   if (nomeUser == null) %> 
-         Usuário Logado -  <%=nomeUser%>
+         Usuário Logado - <%=nomeUser%> - <%=nivelUser%> 
     <br> <br> <br>
     <div>
               <table >
