@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.sql.SQLException;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -29,7 +28,6 @@ public class Upload extends HttpServlet {
     String caminhoRaiz; // Objeto que armazena o caminho raiz da aplicação web
     ServletContext context; // Contexto Servlet de onde se pega o caminho da aplicação web
     String erro;
-   
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -37,35 +35,35 @@ public class Upload extends HttpServlet {
 
         filePart = request.getPart("arquivo"); // Pega o arquivo
         
-        String pkuser = request.getParameter("pkuser"); // Código para Vincular ao nome do arquivo
+
+        String pkuser = request.getParameter("pkuser"); // pkuser 
         String email = request.getParameter("email");
         if (pkuser == null) {
             response.sendRedirect("../index.html");
         }
 
-          
-        // Vincula o nome do arquivo ao código do usuário
-        fileName = filePart.getSubmittedFileName(); // pega o nome original       
+        // Monta o nome do arquivo destino com extensão
+        fileName = filePart.getSubmittedFileName(); // nome original       
         String ext = fileName.substring(fileName.indexOf("."));
         String nomeGravar = "foto" + pkuser.trim() + ext.trim();
         nomeGravar = nomeGravar.trim(); // trim() tira os espaços 
 
-        
-        
-        
-        // Cria o nome caminho destino completo no servidor web
+        // Monta o destino completo do arquivo
         context = getServletContext(); // Pega o Contexto da aplicação web
         uploadPath = context.getRealPath("/"); // pega o caminho da aplicação web
         uploadPath = uploadPath.substring(0, uploadPath.length() - 10);
         uploadPath += "web/javaIMG";
 
+        // Cria a pasta no servidor caso não exista
         uploadDir = new File(uploadPath);
         if (!uploadDir.exists()) {
             uploadDir.mkdirs();//cria a pasta destino sem o nome do arquivo
         }
-        filePath = uploadPath + File.separator + nomeGravar;// monta caminho real de destino
 
-        // Código de gravação do arquivo ar o arquivo
+        // Monta o destino completo com o nome do arquivo
+        filePath = uploadPath + File.separator + nomeGravar;
+
+        // Faz a gravação do arquivo no destino
         try (
                 InputStream input = filePart.getInputStream(); OutputStream output = new FileOutputStream(filePath)) {
             int length;
@@ -73,14 +71,17 @@ public class Upload extends HttpServlet {
             while ((length = input.read(buffer)) > 0) {
                 output.write(buffer, 0, length);
             }
-            
-        // Atualiza a foto no banco de dados
-                Usuario user = new Usuario();
-                user.foto = nomeGravar;
-                user.email= email;
-                user.atualizarFoto();
-                if (user.statusSQL == null) response.sendRedirect("/JavaWebServletImagemADO/javaJSP/cadastro.jsp?oper=");
-                erro = user.statusSQL + "&#92;" + user.sql ;
+
+            // Grava o nome da foto na tabela Usuários
+            Usuario user = new Usuario();
+            user.foto = nomeGravar;
+            user.email = email;
+            user.atualizarFoto();
+          /*  if (user.statusSQL == null) {
+                response.sendRedirect("/JavaWebServletImagemADO/javaJSP/cadastro.jsp?oper=");
+            }
+            */
+            erro = user.statusSQL + "&#92;" + user.sql;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -93,7 +94,8 @@ public class Upload extends HttpServlet {
             out.println("<title>Servlet NewServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet NewServlet at " + erro +   "</h1>");
+            out.println("<h1>Servlet NewServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet NewServlet at " + erro + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }

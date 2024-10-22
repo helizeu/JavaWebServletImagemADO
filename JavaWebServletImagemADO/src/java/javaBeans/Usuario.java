@@ -1,7 +1,6 @@
 package javaBeans;
 import java.sql.SQLException;
 public class Usuario extends Conectar {
-
     public int pkuser;
     public String nome;
     public String email;
@@ -11,30 +10,29 @@ public class Usuario extends Conectar {
     public String foto; // nome da foto do usuário
 
     public boolean getLogin() {
-        if (email.equals(userMaster) && senha.equals(senhaMaster)) {
-            nome = nomeMaster;
-            email = emailMaster;
-            pkuser = 0; 
-            nivel = nivelMaster;
-            foto = fotoMaster;
-            return true;
-        }
-
+        this.statusSQL = null;
         try {
-           sql = "select * from usuarios where ucase(trim(email)) = ucase(trim(?)) and ucase(trim(senha)) = ucase(trim(?))";
+            sql = "select * from usuarios where ucase(trim(email)) = ucase(trim(?)) and ucase(trim(senha)) = ucase(trim(?))";
             ps = con.prepareStatement(sql); // prepara SQL
             ps.setString(1, email); // Configura Parametros
             ps.setString(2, senha); // Configura Parametros
             tab = ps.executeQuery(); // Executa comando SQL
             if (tab.next()) {
-                nome   = tab.getString("nome");
-                email  = tab.getString("email");
-                pkuser = tab.getInt("pkuser"); 
-                nivel  = tab.getString("nivel");
-                foto   = tab.getString("foto");
+                nome = tab.getString("nome");
+                email = tab.getString("email");
+                pkuser = tab.getInt("pkuser");
+                nivel = tab.getString("nivel");
+                foto = tab.getString("foto");
                 return true;
             }
-            this.statusSQL = null; // armazena null se deu tudo certo
+            if (email.equals(userMaster) && senha.equals(senhaMaster)) {
+                nome = "";
+                email = "";
+                pkuser = 0;
+                nivel = nivelMaster;
+                foto = "";
+                return true;
+            }
         } catch (SQLException ex) {
             this.statusSQL = "Erro ao tentar buscar Usuário! " + ex.getMessage();
         }
@@ -52,7 +50,6 @@ public class Usuario extends Conectar {
             ps.setString(3, celular); // Configura Parametros
             ps.setString(4, senha); // Configura Parametros
             ps.setString(5, nivel); // Configura Parametros
-            
 
             ps.executeUpdate(); // executa comando SQL
             this.statusSQL = null; // armazena null se deu tudo certo
@@ -71,7 +68,7 @@ public class Usuario extends Conectar {
             ps.setString(3, celular); // Configura Parametros
             ps.setString(4, senha); // Configura Parametros
             ps.setString(5, nivel); // Configura Parametros
-    
+
             ps.setString(6, email); // Configura Parametros
             ps.executeUpdate(); // executa comando SQL
             this.statusSQL = null; // armazena null se deu tudo certo
@@ -79,33 +76,34 @@ public class Usuario extends Conectar {
             this.statusSQL = "Erro ao Alterar usuario ! <br> " + ex.getMessage();
         }
     }
-  public void deletar () {
+
+    public void deletar() {
         try {
             sql = "delete from usuarios where email = ? ";
             ps = con.prepareStatement(sql); // prepara SQL
             ps.setString(1, email); // Configura Parametros
             ps.executeUpdate();
-            
+
             this.statusSQL = null; // armazena null se deu tudo certo
         } catch (SQLException ex) {
             this.statusSQL = sql + " <br> Erro ao deletar usuario ! <br> " + ex.getMessage();
         }
     }
-  public boolean buscarEmail () {
+
+    public boolean buscarEmail() {
         try {
             sql = "select * from usuarios where ucase(trim(email)) = ucase(trim(?))";
             ps = con.prepareStatement(sql); // prepara SQL
             ps.setString(1, email); // Configura Parametros
             tab = ps.executeQuery();
-            if( tab.next() )
-            {
-               pkuser=tab.getInt("pkuser");
-               nome = tab.getString("nome");
-               celular = tab.getString("celular");
-               senha = tab.getString("senha");
-               nivel = tab.getString("nivel");
-               foto = tab.getString("foto");
-               return true; 
+            if (tab.next()) {
+                pkuser = tab.getInt("pkuser");
+                nome = tab.getString("nome");
+                celular = tab.getString("celular");
+                senha = tab.getString("senha");
+                nivel = tab.getString("nivel");
+                foto = tab.getString("foto");
+                return true;
             }
             this.statusSQL = null; // armazena null se deu tudo certo
         } catch (SQLException ex) {
@@ -113,8 +111,8 @@ public class Usuario extends Conectar {
         }
         return false;
     }
-  
-  public void atualizarFoto() {
+
+    public void atualizarFoto() {
         try {
             sql = "update usuarios set foto=? where ucase(trim(email))=ucase(trim(?)) ";
             ps = con.prepareStatement(sql); // prepara SQL

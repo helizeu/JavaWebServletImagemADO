@@ -1,37 +1,38 @@
 <%@page import="javaBeans.Usuario"%>
 <%
     /* Código de Controle da Sessão */
-    String userLogado = (String) session.getAttribute("nome");
-    String emailLogado = (String) session.getAttribute("email");
+    String userLogado = String.valueOf(session.getAttribute("nome"));
+    String emailLogado = String.valueOf(session.getAttribute("email"));
     String pkUserLogado = String.valueOf(session.getAttribute("pkuser"));
-    String nivelUserLogado = (String) session.getAttribute("nivel");
+    String nivelUserLogado = String.valueOf(session.getAttribute("nivel"));
     if (userLogado == null) {
         response.sendRedirect("../index.html");
     }
+    /* Código de Controle da Sessão */
 
     String foto = "", nome = "", email = "", celular = "", senha = "", nivel = "", sHTML = "";
     String pkuser = "";
-    // Configurar o caminho da foto a ser carregada
+
+    /* Monta o caminho destino da foto a ser carregada */
     String fotoUserLogado = (String) session.getAttribute("foto");
     String fotoCaminho = "../javaIMG" + "&#92;" + fotoUserLogado.trim();
     fotoCaminho = fotoCaminho.trim();
-    // Configurar o caminho da foto a ser carregada
+    /* Monta o caminho destino da foto a ser carregada */
 
     Usuario user = new Usuario(); // Instancia o objeto Usuario
-    
-    if (request.getParameter("email")==null) {
+
+    if (request.getParameter("email") == null) {
         user.email = emailLogado;
     } else {
         user.email = request.getParameter("email");
     }
-
     if (!(user.statusSQL == null)) {
         out.println(user.statusSQL);
     }
 
     String oper = request.getParameter("oper");
 
-    // Se for gravar pega as requisições e faz a consistencia 
+    /* Para gravar pega as requisições e faz a consistência */
     if (oper.equals("Gravar")) {
         nome = request.getParameter("nome");
         email = request.getParameter("email");
@@ -43,34 +44,34 @@
             sHTML = "Advertência: Todos os campos devem ser preenchidos na gravação!";
         }
     }
-    // Se for gravar pega as requisições e faz a consistencia
+    /* Para persistir no banco antes preenche os atributos do objeto user */
+    if (oper.equals("Gravar") && sHTML.isBlank()) {
+        user.nome = nome;
+        user.celular = celular;
+        user.senha = senha;
+        user.nivel = nivel;
 
-    // coloca os dados dentro do objeto User antes de atualizar o banco de dados
-    if (oper.equals("Gravar")) {
-        if (!user.buscarEmail() && sHTML.isBlank()) {
-            user.nome = nome;
-            user.celular = celular;
-            user.senha = senha;
-            user.nivel = nivel;
+        if (!user.buscarEmail()) {
             user.incluir();
         } else {
-            user.nome = nome;
-            user.celular = celular;
-            user.senha = senha;
-            user.nivel = nivel;
             user.alterar();
         }
-    } else if (oper.equals("Deletar")) {
+    }
+
+    if (oper.equals("Deletar")) {
         user.deletar();
         user.nome = nome = "";
         user.email = email = "";
         user.celular = celular = "";
         user.senha = senha = "";
         user.nivel = nivel = "";
+        user.foto = "";
+        user.pkuser = 0;
     }
-    
+
+    /* Sempre tenta carregar o email do usuário logado ou pesquisado */
     if (!user.buscarEmail()) {
-        sHTML = "Advertência: Digite um email válido para localizar um usuário!!";
+        sHTML = "Advertência: Digite um email válido para localizar um usuário!";
     } else {
         nome = user.nome;
         email = user.email;
@@ -102,9 +103,14 @@
 
             <table border="1" >
                 <tr><td align = center> ** Foto Atualizada ** </td></tr>
-                <tr><td align = center> <img src="<%=fotoCaminho%>" style="height: 100px;width: 100px;" alt="Foto"></td></tr>
-                <tr><td> <input type="file" name="arquivo" ></td></tr>
-                <tr><td align = center> <input type="submit" value = "Salvar" style="height: 20px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;"></td></tr>
+                <tr><td align = center> <img src="<%=fotoCaminho%>" style="height: 100px;width: 100px;" alt="Foto" ></td></tr>
+                <tr><td> <input type="file" name="arquivo" id = "arq"></td></tr>
+                <tr><td align = center> 
+                        <input type="button" value = "Salvar" style="height: 20px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;"
+                               onclick=" if (formFoto.arquivo.value)
+                    submit();
+                else
+                    exit();"></td></tr>
             </table>
         </form>
         <br>

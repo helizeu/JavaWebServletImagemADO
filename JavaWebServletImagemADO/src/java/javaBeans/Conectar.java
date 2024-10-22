@@ -19,10 +19,7 @@ public class Conectar {
    /* Atributos do Usuário Master Administrador do Sistema */
       String userMaster  = "admin";
       String senhaMaster = "1234";
-      String emailMaster = "admin@admin.com";
       String nivelMaster = "Master";
-      String nomeMaster  = "D.r Eliseu LS";
-      String fotoMaster  = "foto_0";
    /* Atributos do Usuário Master Administrador do Sistema */
 
    /* Na variável statusSQl conterá null quando não tiver erros 
