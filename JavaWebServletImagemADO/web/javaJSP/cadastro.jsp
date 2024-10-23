@@ -1,156 +1,77 @@
 <%@page import="javaBeans.Usuario"%>
-<%
-    /* CÛdigo de Controle da Sess„o */
-    String userLogado = String.valueOf(session.getAttribute("nome"));
-    String emailLogado = String.valueOf(session.getAttribute("email"));
-    String pkUserLogado = String.valueOf(session.getAttribute("pkuser"));
-    String nivelUserLogado = String.valueOf(session.getAttribute("nivel"));
-    if (userLogado == null) {
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%    /*
+    onclick=" if (formFoto.arquivo.value)
+                    submit();
+                else
+                    exit();"
+     */
+
+    String sHTML = "", minhafoto = "";
+    String nome = (String) session.getAttribute("nome");
+    String email = (String) session.getAttribute("email");
+    if (email == null) {
         response.sendRedirect("../index.html");
     }
-    /* CÛdigo de Controle da Sess„o */
 
-    String foto = "", nome = "", email = "", celular = "", senha = "", nivel = "", sHTML = "";
-    String pkuser = "";
-
-    /* Monta o caminho destino da foto a ser carregada */
-    String fotoUserLogado = (String) session.getAttribute("foto");
-    String fotoCaminho = "../javaIMG" + "&#92;" + fotoUserLogado.trim();
-    fotoCaminho = fotoCaminho.trim();
-    /* Monta o caminho destino da foto a ser carregada */
-
-    Usuario user = new Usuario(); // Instancia o objeto Usuario
-
-    if (request.getParameter("email") == null) {
-        user.email = emailLogado;
-    } else {
-        user.email = request.getParameter("email");
-    }
-    if (!(user.statusSQL == null)) {
-        out.println(user.statusSQL);
-    }
-
-    String oper = request.getParameter("oper");
-
-    /* Para gravar pega as requisiÁıes e faz a consistÍncia */
-    if ( oper.equals("Gravar") ) {
-        nome = request.getParameter("nome");
-        email = request.getParameter("email");
-        celular = request.getParameter("celular");
-        senha = request.getParameter("senha");
-        nivel = request.getParameter("nivel");
-
-        if (nome.isBlank() || email.isBlank() || celular.isBlank() || senha.isBlank() || nivel.isBlank()) {
-            sHTML = "AdvertÍncia: Todos os campos devem ser preenchidos na gravaÁ„o!";
-        }
-    }
-    /* Para persistir no banco antes preenche os atributos do objeto user */
-    if (oper.equals("Gravar") && sHTML.isBlank()) {
-        user.nome = nome;
-        user.celular = celular;
-        user.senha = senha;
-        user.nivel = nivel;
-
-        if (!user.buscarEmail()) {
-            user.incluir();
-        } else {
-            user.alterar();
-        }
-    }
-
-    if (  oper.equals("Deletar") ) {
-        user.deletar();
-        user.nome = nome = "";
-        user.email = email = "";
-        user.celular = celular = "";
-        user.senha = senha = "";
-        user.nivel = nivel = "";
-        user.foto = "";
-        user.pkuser='\0';
-    }
-    
-    /* Sempre tenta carregar o email do usu·rio logado ou pesquisado */
-    oper = "Buscar";    
-    if (!user.buscarEmail()) {
-        sHTML = "AdvertÍncia: Digite um email v·lido para localizar um usu·rio!";
-    } else {
+    Usuario user = new Usuario();
+    if (user.buscarEmail()) {
         nome = user.nome;
-        emailLogado = email = user.email;
-        celular = user.celular;
-        senha = user.senha;
-        nivel = user.nivel;
-        foto = user.foto;
-        pkUserLogado = pkuser = String.valueOf(user.pkuser);
-        fotoCaminho = "../javaIMG" + "&#92;" + foto;
-        fotoCaminho = fotoCaminho.trim();
-        pkuser = String.valueOf(user.pkuser);
-       
+        email = user.email;
+        String celular = user.celular;
+        String senha = user.senha;
+        String nivel = user.nivel;
     }
 
-    if (!(user.statusSQL == null))
-        out.println(user.statusSQL);%>
-
+%>
 <html lang = "pt-br"><head>
-        <title> Cadastro de Usu·rios </title> <meta charset="UTF-8">
+        <title> Cadastro de Usu√°rios </title> <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
     <body style="background-color: greenyellow;" onload="formreg.nome.focus()">
-        <br><br> <h1 align = center> AtualizaÁ„o Cadastral de Usu·rios </h1> <br>
+        <br><br> <h1 align = center> Atualiza√ß√£o Cadastral de Usu√°rios </h1> <br>
     <center> <%=sHTML%> </center>
     <div align = center>   
 
-        <form action="../Upload" name = formFoto method=post enctype="multipart/form-data">
-            <input type="hidden" name = pkuser value ="<%=pkUserLogado%>" >
-            <input type="hidden" name = email value ="<%=emailLogado%>" >
-
+        <form action="../ServletImagemADO" name = formFoto method=post enctype="multipart/form-data">
             <table border="1" >
                 <tr><td align = center> ** Foto Atualizada ** </td></tr>
-                <tr><td align = center> <img src="<%=fotoCaminho%>" style="height: 100px;width: 100px;" alt="Foto" ></td></tr>
+                <tr><td align = center> <img src="<%=minhafoto%>" style="height: 100px;width: 100px;" alt="Foto" ></td></tr>
                 <tr><td> <input type="file" name="arquivo" id = "arq"></td></tr>
-                <tr><td align = center> 
-                        <input type="button" value = "Salvar" style="height: 20px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;"
-                               onclick=" if (formFoto.arquivo.value)
-                    submit();
-                else
-                    exit();"></td></tr>
             </table>
-        </form>
-        <br>
-        <form action="cadastro.jsp" name = formreg method="get" enctype="multipart/form-data" >
+
             <input type="hidden" name = oper >
+
             <table align = center style="border-style: solid;">
                 <tr><td></td><td></tr>
-                <tr><td align="right">Digite seu nome...:</td><td><input type="text" name = nome size = 40 value = "<%
-                    if (oper.equals("Buscar")) {
-                        out.print(nome);
-                    }%>"> </td></tr>
-                <tr><td align="right">Digite seu email..:</td><td><input type="email" name = email size = 40 value = "<%
-                    if (oper.equals("Buscar")) {
-                        out.print(email);
-                    }%>"> </td></tr>
+                <tr><td align="right">Digite seu nome...:</td><td><input type="text" name = nome size = 40 
+              value = "<%if (!(user.nome == null)) out.print(user.nome);%>"> </td></tr>
+                <tr><td align="right">Digite seu email..:</td><td><input type="email" name = email size = 40 
+               value = "<%if (!(user.email == null)) out.print(user.email);%>"> </td></tr>
                 <tr><td align="right">Digite seu Celular:</td><td>
-                        <input type="text" name = celular size = 40 value = "<%
-                            if (oper.equals("Buscar")) {
-                                out.print(celular);
-                            }%>"> </td></tr>
+                        <input type="text" name = celular size = 40 
+                value = "<%if (!(user.celular == null)) out.print(user.celular);%>"> </td></tr>
                 <tr><td align="right">Digite sua Senha..:</td><td>
-                        <input type="password" name = senha size = 40 value = "<%
-                            if (oper.equals("Buscar")) {
-                                out.print(senha);
-                            }%>"> </td></tr>
+                  <input type="password" name = senha size = 40
+                   value = "<%if (!(user.senha == null)) out.print(user.senha);%>"> </td></tr>
                 <tr>  <td align="right">Tipo de acesso....:</td><td><select name="nivel" id="idnivel" >
-                            <option value="<% if (oper.equals("Buscar")) {
-                                    out.print(nivel);
-                                }%>" selected><%
-                                    if (oper.equals("Buscar")) {
-                                        out.print(nivel);
-                                    }%></option>
-                            <option value="administrador"> Administrador </option>
-                            <option value="gerente"> Gerente </option>
+                      <option value = "<%if (!(user.nivel == null)) out.print(user.nivel);%>" selected>
+                      <%if (!(user.nivel == null)) out.print(user.nivel);%> </option>
+                      <option value="administrador"> Administrador </option>
+                      <option value="gerente"> Gerente </option>
                             <option value="normal"> Normal </option>
-                        </select> </td></tr>  </table>      <br>   <table align="center">   <tr><td align="center">    <input type="reset" value="Novo" onclick="formreg.nome.focus()"  style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
-                    </td>   <td align="center">
+                        </select> </td></tr> 
+
+            </table>      <br>
+            <table align="center">
+                <tr><td align="center">
                         <input type="submit" value="Gravar" name="gravar" onclick="formreg.oper.value = 'Gravar';" style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
                     </td>  <td align="center">
                         <input type="submit" value="Buscar" name="buscar" onclick="formreg.oper.value = 'Buscar';" style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
                     </td> <td align="center">  <input type="submit" value="Deletar" name = "deletar" onclick="formreg.oper.value = 'Deletar';" style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
-                    </td> </tr>  </table>        </form> <h1 align = center> Criando o Servlet Uploader </h1></div></body></html>
+                    </td>
+                    <td align="center">
+                        <input type="button" value="Voltar" 
+                     onclick="window.location.href = '../index.html'; "  style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
+                    </td>   
+
+                </tr>  </table>        </form> <h1 align = center> Criando o Servlet Uploader </h1></div></body></html>
