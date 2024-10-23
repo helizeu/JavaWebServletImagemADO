@@ -78,7 +78,8 @@ public class Upload extends HttpServlet {
             user.email = email;
             if ( user.email.length() > 0 ) user.atualizarFoto();
             if (user.statusSQL == null) {
-                response.sendRedirect("/JavaWebServletImagemADO/javaJSP/cadastro.jsp?oper=");
+                String urls = request.getContextPath() + "/javaJSP/cadastro.jsp?oper="; 
+                response.sendRedirect(urls);
             }
             
             erro = user.statusSQL + "&#92;" + user.email + " " +  nomeGravar + " " + user.sql;
