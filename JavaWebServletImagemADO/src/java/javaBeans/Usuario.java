@@ -121,7 +121,7 @@ public class Usuario extends Conectar {
             ps.executeUpdate(); // executa comando SQL
             this.statusSQL = null; // armazena null se deu tudo certo
         } catch (SQLException ex) {
-            this.statusSQL = "Erro ao atualizar foto ! <br> " + ex.getMessage();
+            this.statusSQL = "Erro ao atualizar foto ! <br> " + sql + ex.getMessage();
         }
     }
 }

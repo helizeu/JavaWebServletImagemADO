@@ -16,7 +16,7 @@
     <br> <br> <br> 
     <h2 style="color:black;"> *** Bem vindo ao Sistema Java Web Servlet Uploader *** </h2>
     <%   if (nomeUser == null) %> 
-         Usuário Logado - <%=nomeUser%> - <%=nivelUser%> 
+         Usuário Logado - <%=nivelUser%> 
     <br> <br> <br>
     <div>
               <table >

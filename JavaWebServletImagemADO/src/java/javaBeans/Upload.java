@@ -76,12 +76,12 @@ public class Upload extends HttpServlet {
             Usuario user = new Usuario();
             user.foto = nomeGravar;
             user.email = email;
-            user.atualizarFoto();
-          /*  if (user.statusSQL == null) {
+            if ( user.email.length() > 0 ) user.atualizarFoto();
+            if (user.statusSQL == null) {
                 response.sendRedirect("/JavaWebServletImagemADO/javaJSP/cadastro.jsp?oper=");
             }
-            */
-            erro = user.statusSQL + "&#92;" + user.sql;
+            
+            erro = user.statusSQL + "&#92;" + user.email + " " +  nomeGravar + " " + user.sql;
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -33,7 +33,7 @@
     String oper = request.getParameter("oper");
 
     /* Para gravar pega as requisições e faz a consistência */
-    if (oper.equals("Gravar")) {
+    if ( oper.equals("Gravar") ) {
         nome = request.getParameter("nome");
         email = request.getParameter("email");
         celular = request.getParameter("celular");
@@ -58,7 +58,7 @@
         }
     }
 
-    if (oper.equals("Deletar")) {
+    if (  oper.equals("Deletar") ) {
         user.deletar();
         user.nome = nome = "";
         user.email = email = "";
@@ -66,24 +66,25 @@
         user.senha = senha = "";
         user.nivel = nivel = "";
         user.foto = "";
-        user.pkuser = 0;
+        user.pkuser='\0';
     }
-
+    
     /* Sempre tenta carregar o email do usuário logado ou pesquisado */
+    oper = "Buscar";    
     if (!user.buscarEmail()) {
         sHTML = "Advertência: Digite um email válido para localizar um usuário!";
     } else {
         nome = user.nome;
-        email = user.email;
+        emailLogado = email = user.email;
         celular = user.celular;
         senha = user.senha;
         nivel = user.nivel;
         foto = user.foto;
-
+        pkUserLogado = pkuser = String.valueOf(user.pkuser);
         fotoCaminho = "../javaIMG" + "&#92;" + foto;
         fotoCaminho = fotoCaminho.trim();
         pkuser = String.valueOf(user.pkuser);
-        oper = "Buscar";
+       
     }
 
     if (!(user.statusSQL == null))
