@@ -7,8 +7,7 @@ public class Usuario extends Conectar {
     public String celular;
     public String senha;
     public String nivel;
-    public String foto; // nome da foto do usuário
-
+   
     public boolean getLogin() {
         this.statusSQL = null;
         try {
@@ -22,7 +21,7 @@ public class Usuario extends Conectar {
                 email = tab.getString("email");
                 pkuser = tab.getInt("pkuser");
                 nivel = tab.getString("nivel");
-                foto = tab.getString("foto");
+             
                 return true;
             }
             if (email.equals(userMaster) && senha.equals(senhaMaster)) {
@@ -30,7 +29,7 @@ public class Usuario extends Conectar {
                 email = "";
                 pkuser = 0;
                 nivel = nivelMaster;
-                foto = "";
+           
                 return true;
             }
         } catch (SQLException ex) {
@@ -102,7 +101,7 @@ public class Usuario extends Conectar {
                 celular = tab.getString("celular");
                 senha = tab.getString("senha");
                 nivel = tab.getString("nivel");
-                foto = tab.getString("foto");
+             
                 return true;
             }
             this.statusSQL = null; // armazena null se deu tudo certo
@@ -112,16 +111,4 @@ public class Usuario extends Conectar {
         return false;
     }
 
-    public void atualizarFoto() {
-        try {
-            sql = "update usuarios set foto=? where ucase(trim(email))=ucase(trim(?)) ";
-            ps = con.prepareStatement(sql); // prepara SQL
-            ps.setString(1, foto); // Configura Parametros
-            ps.setString(2, email); // Configura Parametros
-            ps.executeUpdate(); // executa comando SQL
-            this.statusSQL = null; // armazena null se deu tudo certo
-        } catch (SQLException ex) {
-            this.statusSQL = "Erro ao atualizar foto ! <br> " + sql + ex.getMessage();
-        }
-    }
 }

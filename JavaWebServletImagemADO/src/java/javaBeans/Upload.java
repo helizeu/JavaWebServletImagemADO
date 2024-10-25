@@ -71,18 +71,6 @@ public class Upload extends HttpServlet {
             while ((length = input.read(buffer)) > 0) {
                 output.write(buffer, 0, length);
             }
-
-            // Grava o nome da foto na tabela Usuários
-            Usuario user = new Usuario();
-            user.foto = nomeGravar;
-            user.email = email;
-            if ( user.email.length() > 0 ) user.atualizarFoto();
-            if (user.statusSQL == null) {
-                String urls = request.getContextPath() + "/javaJSP/cadastro.jsp?oper="; 
-                response.sendRedirect(urls);
-            }
-            
-            erro = user.statusSQL + "&#92;" + user.email + " " +  nomeGravar + " " + user.sql;
         } catch (IOException e) {
             e.printStackTrace();
         }

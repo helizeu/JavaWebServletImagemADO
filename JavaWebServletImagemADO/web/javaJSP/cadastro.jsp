@@ -8,31 +8,24 @@
      */
 
     String sHTML = "", minhafoto = "";
-    String nome = (String) session.getAttribute("nome");
     String email = (String) session.getAttribute("email");
-    if (email == null) {
-        response.sendRedirect("../index.html");
-    }
+    if (email == null) response.sendRedirect("../index.html"); 
 
+    boolean existeUser = false;
+    
     Usuario user = new Usuario();
-    if (user.buscarEmail()) {
-        nome = user.nome;
-        email = user.email;
-        String celular = user.celular;
-        String senha = user.senha;
-        String nivel = user.nivel;
-    }
+    user.email = email;
+    if (user.buscarEmail()) { existeUser = true; }
 
 %>
 <html lang = "pt-br"><head>
         <title> Cadastro de Usuários </title> <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-    <body style="background-color: greenyellow;" onload="formreg.nome.focus()">
+    <body style="background-color: greenyellow;" onload="formCad.nome.focus()">
         <br><br> <h1 align = center> Atualização Cadastral de Usuários </h1> <br>
-    <center> <%=sHTML%> </center>
-    <div align = center>   
+       <div align = center>   
 
-        <form action="../ServletImagemADO" name = formFoto method=post enctype="multipart/form-data">
+        <form action="../CadUser.php" name = formCad method=post enctype="multipart/form-data">
             <table border="1" >
                 <tr><td align = center> ** Foto Atualizada ** </td></tr>
                 <tr><td align = center> <img src="<%=minhafoto%>" style="height: 100px;width: 100px;" alt="Foto" ></td></tr>
@@ -64,14 +57,12 @@
             </table>      <br>
             <table align="center">
                 <tr><td align="center">
-                        <input type="submit" value="Gravar" name="gravar" onclick="formreg.oper.value = 'Gravar';" style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
-                    </td>  <td align="center">
-                        <input type="submit" value="Buscar" name="buscar" onclick="formreg.oper.value = 'Buscar';" style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
-                    </td> <td align="center">  <input type="submit" value="Deletar" name = "deletar" onclick="formreg.oper.value = 'Deletar';" style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
+                        <input type="submit" value="Gravar" name="gravar" " style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
+                   <td align="center">  <input type="submit" value="Deletar" name = "deletar" " style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
                     </td>
                     <td align="center">
                         <input type="button" value="Voltar" 
                      onclick="window.location.href = '../index.html'; "  style="height: 30px; width: 70px;background-color: rgba(92, 117, 116, 0.26);border-radius: 20%;">
                     </td>   
 
-                </tr>  </table>        </form> <h1 align = center> Criando o Servlet Uploader </h1></div></body></html>
+                </tr>  </table>        </form> <h1 align = center> Criando o Servlet CadUserFoto </h1></div></body></html>

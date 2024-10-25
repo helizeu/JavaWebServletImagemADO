@@ -19,8 +19,6 @@
             session.setAttribute("email", user.email);
             session.setAttribute("nivel", user.nivel);
             session.setAttribute("pkuser", user.pkuser);
-            if (user.foto == null) user.foto = " ";
-            session.setAttribute("foto", user.foto);
             response.sendRedirect("sistema.jsp");// carrega a página de sistema
             } else {
                 String sHTML = "<center>Opa! Erro de Login! " + user.statusSQL 
