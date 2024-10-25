@@ -21,7 +21,7 @@
             session.setAttribute("pkuser", user.pkuser);
             response.sendRedirect("sistema.jsp");// carrega a página de sistema
             } else {
-                String sHTML = "<center>Opa! Erro de Login! " + user.statusSQL 
+                String sHTML = "<br><br> <center>Opa! Erro de Login! " + user.statusSQL 
                         + "<br><a href = '../index.html'> Voltar </a></center>";
                 out.println(sHTML);
             }%>

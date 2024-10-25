@@ -11,19 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-@WebServlet(name = "CadUser", urlPatterns = {"/CadUser.php"})
+@WebServlet(name = "CadUser", urlPatterns = {"/CadUser"})
 @MultipartConfig
 public class CadUser extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
@@ -31,10 +22,9 @@ public class CadUser extends HttpServlet {
         String sHTML = "";
 
         HttpSession session = request.getSession(true);
-        if (String.valueOf(session.getAttribute("nome")) == null) {
+        if (String.valueOf(session.getAttribute("nome")) == null) 
             response.sendRedirect("../index.html");
-        }
-
+        
         Usuario user = new Usuario(); // Instancia o objeto Usuario
         user.email = request.getParameter("email");
         user.nome = request.getParameter("nome");
@@ -42,21 +32,12 @@ public class CadUser extends HttpServlet {
         user.senha = request.getParameter("senha");
         user.nivel = request.getParameter("nivel");
 
-          if ( request.getParameter("gravar").equals("Gravar") )
-          {
-              if (!user.buscarEmail()) {
-                user.incluir();
-            } else {
-                user.alterar();
-            }
-        }
-
-          
-          if ( request.getParameter("deletar").equals("Deletar") )
-          {
+         if ( request.getParameter("gravar") != null) user.gravar();
+ 
+          if ( request.getParameter("deletar") != null ) {
              user.deletar();
              session.invalidate();
-        }
+          }
           
         String url = request.getContextPath() + "/javaJSP/cadastro.jsp";
         if (user.buscarEmail()) {
@@ -64,16 +45,14 @@ public class CadUser extends HttpServlet {
         }
 
         try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CadUser</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1> "+sHTML+"A sessão foi finalizada por que você deletou seu usuário..!</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            sHTML = "<!DOCTYPE html>";
+            sHTML += "<html><head><title>Cadastro de Usuários</title>";
+            sHTML += "</head><body style=\"background-color: greenyellow;\">";
+            sHTML += "<br><br><center>A sessão foi finalizada por que você deletou seu usuário..!<br>";
+            sHTML += "<a href ='" + request.getContextPath() + "/" + "index.html";
+            sHTML += "'> Voltar </a></center>";
+            sHTML += "</body></html>";
+            out.print(sHTML);
         }
     }
 
